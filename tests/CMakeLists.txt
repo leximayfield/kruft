@@ -1,5 +1,3 @@
-add_subdirectory(zztest)
-
 include(CheckCompilerFlag)
 include(FindSanitizers)
 
@@ -20,15 +18,17 @@ set(TEST_SOURCES
 
 # Test suite.
 add_executable(kruft_test_c
-    "${CMAKE_CURRENT_SOURCE_DIR}/test_c.c")
+    "${CMAKE_CURRENT_SOURCE_DIR}/test_c.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/zztest.c")
 add_executable(kruft_test_cxx
-    "${CMAKE_CURRENT_SOURCE_DIR}/test_cxx.cpp")
+    "${CMAKE_CURRENT_SOURCE_DIR}/test_cxx.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/zztest.c")
 
 target_include_directories(kruft_test_c PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(kruft_test_cxx PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
-target_link_libraries(kruft_test_c PRIVATE kruft zztest_c)
-target_link_libraries(kruft_test_cxx PRIVATE kruft zztest_cxx)
+target_link_libraries(kruft_test_c PRIVATE kruft)
+target_link_libraries(kruft_test_cxx PRIVATE kruft)
 
 check_compiler_flag(CXX -Wmost W_MOST)
 if(W_MOST)
