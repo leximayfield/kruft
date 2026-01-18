@@ -48,6 +48,7 @@ struct zzt_test_state_s {
     int skipped;
 };
 
+static char g_scopedTrace[128];
 static const char *g_cmpStrings[] = {"==", "!=", "<", "<=", ">", ">="};
 static unsigned long g_testsCount;
 static struct zzt_test_suite_s *g_suitesHead;
@@ -81,6 +82,22 @@ zzt_ms(void)
 #endif
 }
 
+#if defined(__GNUC__)
+#define zzt_vsprintf(buf, buflen, fmt, va) vsnprintf(buf, buflen, fmt, va)
+#elif defined(_MSC_VER) /* FIXME: When was this added? */
+#define zzt_vsprintf(buf, buflen, fmt, va) \
+    do { \
+        _vsnprintf(buf, buflen, fmt, va); \
+        buf[buflen - 1] = '\0'; \
+    } while (0)
+#else
+#define zzt_vsprintf(buf, buflen, fmt, va) \
+    do { \
+        (void)buflen; \
+        vsprintf(buf, fmt, va); \
+    } while (0)
+#endif
+
 /**
  * @brief Use the safest vsprintf we have available.
  *
@@ -92,20 +109,12 @@ zzt_ms(void)
 static void
 zzt_sprintf(char *buf, unsigned buflen, const char *fmt, ...)
 {
-    va_list args;
-    va_start(args, fmt);
+    va_list va;
+    va_start(va, fmt);
 
-#if defined(__GNUC__)
-    vsnprintf(buf, buflen, fmt, args);
-#elif defined(_MSC_VER) /* FIXME: When was this added? */
-    _vsnprintf(buf, buflen, fmt, args);
-    buf[buflen - 1] = '\0';
-#else
-    (void)buflen;
-    vsprintf(buf, fmt, args);
-#endif
+    zzt_vsprintf(buf, buflen, fmt, va);
 
-    va_end(args);
+    va_end(va);
 }
 
 /**
@@ -277,7 +286,12 @@ zzt_printerr(enum zzt_fmt_e fmt, enum zzt_cmp_e cmp, const void *l,
             ZZT_PRINTF("    Which is: %s\n", rbuf);
         }
     }
-    ZZT_PRINTF("\n");
+
+    if (g_scopedTrace[0] != '\0') {
+        ZZT_PRINTF("Scoped trace: %s\n\n", g_scopedTrace);
+    } else {
+        ZZT_PRINTF("\n");
+    }
 }
 
 /**
@@ -332,7 +346,13 @@ void
 zzt_fail(struct zzt_test_state_s *state, const char *file, unsigned long line,
     const char *msgstr)
 {
-    ZZT_PRINTF("%s(%lu): error: %s\n\n", file, line, msgstr);
+    ZZT_PRINTF("%s(%lu): error: %s\n", file, line, msgstr);
+    if (g_scopedTrace[0] != '\0') {
+        ZZT_PRINTF("Scoped trace: %s\n\n", g_scopedTrace);
+    } else {
+        ZZT_PRINTF("\n");
+    }
+
     state->failed += 1;
 }
 
@@ -419,6 +439,19 @@ zzt_cmp_str(struct zzt_test_state_s *state, enum zzt_fmt_e fmt,
 /******************************************************************************/
 
 void
+zzt_scoped_trace(const char *fmt, ...)
+{
+    va_list va;
+    va_start(va, fmt);
+
+    zzt_vsprintf(g_scopedTrace, sizeof(g_scopedTrace), fmt, va);
+
+    va_end(va);
+}
+
+/******************************************************************************/
+
+void
 zzt_add_test_suite(struct zzt_test_suite_s *suite)
 {
     if (g_suitesHead == NULL) {
@@ -471,6 +504,7 @@ zzt_run_all(void)
             state.passed = 0;
             state.failed = 0;
             state.skipped = 0;
+            g_scopedTrace[0] = '\0';
 
             startTestMs = zzt_ms();
             test->func(&state);

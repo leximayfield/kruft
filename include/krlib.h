@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #endif
 
+#define KR_COUNTOF(a) sizeof(a) / sizeof(a[0])
+
 KR_NODISCARD KR_INLINE void *kr_reallocarray(void *ptr, size_t nmemb, size_t size);
 
 /******************************************************************************/

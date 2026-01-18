@@ -771,6 +771,11 @@ struct zzt_test_suite_s {
     } while (0)
 
 /**
+ * @brief Keep track of context to be shown if a test fails.
+ */
+#define SCOPED_TRACE zzt_scoped_trace
+
+/**
  * @brief Add suite of tests to be run when RUN_TESTS is called.
  */
 #define ADD_TEST_SUITE(s) \
@@ -811,6 +816,9 @@ zzt_cmp_str(struct zzt_test_state_s *state, enum zzt_fmt_e fmt,
 
 void
 zzt_add_test_suite(struct zzt_test_suite_s *suite);
+
+void
+zzt_scoped_trace(const char *fmt, ...);
 
 int
 zzt_run_all(void);

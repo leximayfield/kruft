@@ -10,6 +10,7 @@
 
 #include "t_bit.inl"
 #include "t_bltin.inl"
+#include "t_ckdint.inl"
 #include "t_ctype.inl"
 #include "t_int.inl"
 #include "t_lib.inl"
@@ -23,6 +24,7 @@ int main()
 {
     ADD_TEST_SUITE(bit);
     ADD_TEST_SUITE(bltin);
+    ADD_TEST_SUITE(ckdint);
     ADD_TEST_SUITE(ctype);
     ADD_TEST_SUITE(int);
     ADD_TEST_SUITE(lib);

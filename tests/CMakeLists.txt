@@ -7,6 +7,7 @@ set(KRUFT_CXX_STANDARD "14" CACHE STRING "C++ Standard to use")
 set(TEST_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/t_bit.inl"
     "${CMAKE_CURRENT_SOURCE_DIR}/t_bltin.inl"
+    "${CMAKE_CURRENT_SOURCE_DIR}/t_ckdint.inl"
     "${CMAKE_CURRENT_SOURCE_DIR}/t_ctype.inl"
     "${CMAKE_CURRENT_SOURCE_DIR}/t_int.inl"
     "${CMAKE_CURRENT_SOURCE_DIR}/t_lib.inl"
