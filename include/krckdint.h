@@ -20,12 +20,12 @@ KR_CONSTEXPR bool kr_ckd_add_i32(int32_t *res, intmax_t a, intmax_t b)
         // Sign is the same, check for overflow.
         if ((!sa && a > INT32_MAX - b) || (sa && a < INT32_MIN - b))
         {
-            return false;
+            return true;
         }
     }
 
     *res = KR_CASTS(int32_t, a + b);
-    return true;
+    return false;
 }
 
 KR_CONSTEXPR bool kr_ckd_add_u32(uint32_t *res, uintmax_t a, uintmax_t b)
@@ -33,11 +33,11 @@ KR_CONSTEXPR bool kr_ckd_add_u32(uint32_t *res, uintmax_t a, uintmax_t b)
     const uintmax_t c = a + b;
     if (c > UINT32_MAX || c < a)
     {
-        return false;
+        return true;
     }
 
     *res = KR_CASTS(uint32_t, c);
-    return true;
+    return false;
 }
 
 #endif /* !defined(KRCKDINT_H) */
