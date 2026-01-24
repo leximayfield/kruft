@@ -95,4 +95,11 @@
  */
 #define kr_clamp(v, lo, hi) ((v) < (lo)) ? (lo) : ((hi) < (v)) ? (hi) : (v)
 
+/**
+ * @brief Get the sign of a number.
+ *
+ * @return 1 if number is positive, -1 if number is negative, 0 if zero.
+ */
+#define kr_signum(v) ((v > 0) - (v < 0))
+
 #endif /* KRMATH_H */
