@@ -567,24 +567,24 @@ KR_CONSTEXPR unsigned kr_bit_width64(uint64_t x) KR_NOEXCEPT
 
 KR_CONSTEXPR uint8_t kr_rotate_left8(uint8_t x, unsigned c) KR_NOEXCEPT
 {
-    return KR_CASTS(uint8_t, x << c) | KR_CASTS(uint8_t, x >> (-c & 0x07));
+    return KR_CASTS(uint8_t, x << c) | KR_CASTS(uint8_t, x >> ((0 - c) & 0x07));
 }
 
 KR_CONSTEXPR uint16_t kr_rotate_left16(uint16_t x, unsigned c) KR_NOEXCEPT
 {
-    return KR_CASTS(uint16_t, x << c) | KR_CASTS(uint16_t, x >> (-c & 0x0F));
+    return KR_CASTS(uint16_t, x << c) | KR_CASTS(uint16_t, x >> ((0 - c) & 0x0F));
 }
 
 KR_CONSTEXPR uint32_t kr_rotate_left32(uint32_t x, unsigned c) KR_NOEXCEPT
 {
-    return (x << c) | (x >> (-c & 0x1F));
+    return (x << c) | (x >> ((0 - c) & 0x1F));
 }
 
 #if defined(UINT64_MAX)
 
 KR_CONSTEXPR uint64_t kr_rotate_left64(uint64_t x, unsigned c) KR_NOEXCEPT
 {
-    return (x << c) | (x >> (-c & 0x3F));
+    return (x << c) | (x >> ((0 - c) & 0x3F));
 }
 
 #endif /* defined(UINT64_MAX) */
@@ -593,24 +593,24 @@ KR_CONSTEXPR uint64_t kr_rotate_left64(uint64_t x, unsigned c) KR_NOEXCEPT
 
 KR_CONSTEXPR uint8_t kr_rotate_right8(uint8_t x, unsigned c) KR_NOEXCEPT
 {
-    return KR_CASTS(uint8_t, x >> c) | KR_CASTS(uint8_t, x << (-c & 0x07));
+    return KR_CASTS(uint8_t, x >> c) | KR_CASTS(uint8_t, x << ((0 - c) & 0x07));
 }
 
 KR_CONSTEXPR uint16_t kr_rotate_right16(uint16_t x, unsigned c) KR_NOEXCEPT
 {
-    return KR_CASTS(uint16_t, x >> c) | KR_CASTS(uint16_t, x << (-c & 0x0F));
+    return KR_CASTS(uint16_t, x >> c) | KR_CASTS(uint16_t, x << ((0 - c) & 0x0F));
 }
 
 KR_CONSTEXPR uint32_t kr_rotate_right32(uint32_t x, unsigned c) KR_NOEXCEPT
 {
-    return (x >> c) | (x << (-c & 0x1F));
+    return (x >> c) | (x << ((0 - c) & 0x1F));
 }
 
 #if defined(UINT64_MAX)
 
 KR_CONSTEXPR uint64_t kr_rotate_right64(uint64_t x, unsigned c) KR_NOEXCEPT
 {
-    return (x >> c) | (x << (-c & 0x3F));
+    return (x >> c) | (x << ((0 - c) & 0x3F));
 }
 
 #endif /* defined(UINT64_MAX) */
@@ -807,7 +807,7 @@ KR_CONSTEXPR unsigned kr_count_ones8(uint8_t x) KR_NOEXCEPT
     x = x - ((x >> 1) & UINT8_C(0x55));
     x = (x & UINT8_C(0x33)) + ((x >> 2) & UINT8_C(0x33));
     x = (x + (x >> 4)) & UINT8_C(0x0f);
-    return KR_CASTS(uint8_t, x * UINT8_C(0x01));
+    return KR_CASTS(uint8_t, x *UINT8_C(0x01));
 }
 
 KR_CONSTEXPR unsigned kr_count_ones16(uint16_t x) KR_NOEXCEPT
@@ -815,7 +815,7 @@ KR_CONSTEXPR unsigned kr_count_ones16(uint16_t x) KR_NOEXCEPT
     x = x - ((x >> 1) & UINT16_C(0x5555));
     x = (x & UINT16_C(0x3333)) + ((x >> 2) & UINT16_C(0x3333));
     x = (x + (x >> 4)) & UINT16_C(0x0f0f);
-    return KR_CASTS(uint16_t, x * UINT16_C(0x0101)) >> 8;
+    return KR_CASTS(uint16_t, x *UINT16_C(0x0101)) >> 8;
 }
 
 KR_CONSTEXPR unsigned kr_count_ones32(uint32_t x) KR_NOEXCEPT
@@ -823,7 +823,7 @@ KR_CONSTEXPR unsigned kr_count_ones32(uint32_t x) KR_NOEXCEPT
     x = x - ((x >> 1) & UINT32_C(0x55555555));
     x = (x & UINT32_C(0x33333333)) + ((x >> 2) & UINT32_C(0x33333333));
     x = (x + (x >> 4)) & UINT32_C(0x0f0f0f0f);
-    return KR_CASTS(uint32_t, x * UINT32_C(0x01010101)) >> 24;
+    return KR_CASTS(uint32_t, x *UINT32_C(0x01010101)) >> 24;
 }
 
 #if defined(UINT64_MAX)
@@ -833,7 +833,7 @@ KR_CONSTEXPR unsigned kr_count_ones64(uint64_t x) KR_NOEXCEPT
     x = x - ((x >> 1) & UINT64_C(0x5555555555555555));
     x = (x & UINT64_C(0x3333333333333333)) + ((x >> 2) & UINT64_C(0x3333333333333333));
     x = (x + (x >> 4)) & UINT64_C(0x0f0f0f0f0f0f0f0f);
-    return KR_CASTS(uint64_t, x * UINT64_C(0x0101010101010101)) >> 56;
+    return KR_CASTS(uint64_t, x *UINT64_C(0x0101010101010101)) >> 56;
 }
 
 #endif /* defined(UINT64_MAX) */

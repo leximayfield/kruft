@@ -13,8 +13,8 @@
 
 KR_CONSTEXPR bool kr_ckd_add_i32(int32_t *res, intmax_t a, intmax_t b)
 {
-    const intmax_t sa = a >> 63;
-    const intmax_t sb = b >> 63;
+    const intmax_t sa = a >> ((sizeof(intmax_t) * CHAR_BIT) - 1);
+    const intmax_t sb = b >> ((sizeof(intmax_t) * CHAR_BIT) - 1);
     if (sa == sb)
     {
         // Sign is the same, check for overflow.
