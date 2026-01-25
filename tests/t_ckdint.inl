@@ -41,7 +41,7 @@ TEST(ckdint, kr_ckd_add_i32)
     bool overflow = false;
     size_t i = 0;
 
-    for (i = 0; i < KR_COUNTOF(g_add_s32_tests); i++)
+    for (i = 0; i < kr_countof(g_add_s32_tests); i++)
     {
         SCOPED_TRACE("a:%ld, b:%ld", (long)g_add_s32_tests[i].a, (long)g_add_s32_tests[i].b);
 
@@ -81,7 +81,7 @@ TEST(ckdint, kr_ckd_add_u32)
     bool overflow = false;
     size_t i = 0;
 
-    for (i = 0; i < KR_COUNTOF(g_add_u32_tests); i++)
+    for (i = 0; i < kr_countof(g_add_u32_tests); i++)
     {
         SCOPED_TRACE("a:%lu, b:%lu", (unsigned long)g_add_u32_tests[i].a, (unsigned long)g_add_u32_tests[i].b);
 

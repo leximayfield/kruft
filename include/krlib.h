@@ -16,8 +16,22 @@
 #include <stdlib.h>
 #endif
 
-#define KR_COUNTOF(a) sizeof(a) / sizeof(a[0])
+/**
+ * @brief Count the number of array items.
+ */
+#define kr_countof(a) (sizeof(a) / sizeof(a[0]))
 
+/**
+ * @brief Equivalent to realloc(ptr, nmemb * size), except returns NULL if
+ *        nmemb * size would overflow.
+ *
+ * @param ptr Pointer to memory block to be resized, or NULL if a new allocation
+ *            is desired.
+ * @param nmemb Number of elements in desired allocation.
+ * @param size Size of each element in desired allocation.
+ * @return Pointer to reallocated memory, or NULL if realloc failed or overflow
+ *         was detected.
+ */
 KR_NODISCARD KR_INLINE void *kr_reallocarray(void *ptr, size_t nmemb, size_t size);
 
 /******************************************************************************/

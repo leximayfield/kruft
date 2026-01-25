@@ -10,15 +10,18 @@
 #define KRCKDINT_H
 
 #include "./krint.h"
+#include "./krmath.h"
+
+/******************************************************************************/
 
 KR_CONSTEXPR bool kr_ckd_add_i32(int32_t *res, intmax_t a, intmax_t b)
 {
-    const intmax_t sa = a >> ((sizeof(intmax_t) * CHAR_BIT) - 1);
-    const intmax_t sb = b >> ((sizeof(intmax_t) * CHAR_BIT) - 1);
-    if (sa == sb)
+    const intmax_t sa = kr_signum(a);
+    const intmax_t sb = kr_signum(b);
+    if (sa == sb && sa != 0)
     {
-        // Sign is the same, check for overflow.
-        if ((!sa && a > INT32_MAX - b) || (sa && a < INT32_MIN - b))
+        // Sign is the same and non-zero, check for overflow.
+        if ((sa > 0 && a > INT32_MAX - b) || (sa < 0 && a < INT32_MIN - b))
         {
             return true;
         }
@@ -27,6 +30,8 @@ KR_CONSTEXPR bool kr_ckd_add_i32(int32_t *res, intmax_t a, intmax_t b)
     *res = KR_CASTS(int32_t, a + b);
     return false;
 }
+
+/******************************************************************************/
 
 KR_CONSTEXPR bool kr_ckd_add_u32(uint32_t *res, uintmax_t a, uintmax_t b)
 {
