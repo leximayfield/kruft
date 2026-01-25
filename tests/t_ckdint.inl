@@ -18,41 +18,37 @@
 
 static struct
 {
-    int32_t res;
+    bool overflow;
+    int16_t res;
     intmax_t a;
     intmax_t b;
-} g_add_s32_tests[] = {
-    {-1, 1, -2},                          //
-    {3, 1, 2},                            //
-    {-3, -1, -2},                         //
-    {1, 1, 0},                            //
-    {-2, 0, -2},                          //
-    {0xDEAD, INT32_MAX, 1},               //
-    {0xDEAD, INT32_MAX, INT32_MAX},       //
-    {0xDEAD, INT32_MIN, -1},              //
-    {0xDEAD, INT32_MIN, INT32_MIN},       //
-    {2147483646, 1073741823, 1073741823}, //
-    {0xDEAD, 1073741824, 1073741824},     //
+} g_add_i16_tests[] = {
+    {false, -1, 1, -2},              //
+    {false, 3, 1, 2},                //
+    {false, -3, -1, -2},             //
+    {false, 1, 1, 0},                //
+    {false, -2, 0, -2},              //
+    {true, 0, INT16_MAX, 1},         //
+    {true, 0, INT16_MAX, INT16_MAX}, //
+    {true, 0, INT16_MIN, -1},        //
+    {true, 0, INT16_MIN, INT16_MIN}, //
 };
 
-TEST(ckdint, kr_ckd_add_i32)
+TEST(ckdint, kr_ckd_add_i16)
 {
-    int32_t res = 0;
+    int16_t res = 0;
     bool overflow = false;
     size_t i = 0;
 
-    for (i = 0; i < kr_countof(g_add_s32_tests); i++)
+    for (i = 0; i < kr_countof(g_add_i16_tests); i++)
     {
-        SCOPED_TRACE("a:%ld, b:%ld", (long)g_add_s32_tests[i].a, (long)g_add_s32_tests[i].b);
+        SCOPED_TRACE("a:%ld, b:%ld", (long)g_add_i16_tests[i].a, (long)g_add_i16_tests[i].b);
 
-        overflow = kr_ckd_add_i32(&res, g_add_s32_tests[i].a, g_add_s32_tests[i].b);
+        overflow = kr_ckd_add_i16(&res, g_add_i16_tests[i].a, g_add_i16_tests[i].b);
+        EXPECT_BOOLEQ(overflow, g_add_i16_tests[i].overflow);
         if (!overflow)
         {
-            EXPECT_INTEQ(res, g_add_s32_tests[i].res);
-        }
-        else
-        {
-            EXPECT_INTEQ(0xDEAD, g_add_s32_tests[i].res);
+            EXPECT_INTEQ(res, g_add_i16_tests[i].res);
         }
     }
 }
@@ -61,18 +57,96 @@ TEST(ckdint, kr_ckd_add_i32)
 
 static struct
 {
+    bool overflow;
+    int32_t res;
+    intmax_t a;
+    intmax_t b;
+} g_add_i32_tests[] = {
+    {false, -1, 1, -2},                          //
+    {false, 3, 1, 2},                            //
+    {false, -3, -1, -2},                         //
+    {false, 1, 1, 0},                            //
+    {false, -2, 0, -2},                          //
+    {true, 0, INT32_MAX, 1},                     //
+    {true, 0, INT32_MAX, INT32_MAX},             //
+    {true, 0, INT32_MIN, -1},                    //
+    {true, 0, INT32_MIN, INT32_MIN},             //
+    {false, 2147483646, 1073741823, 1073741823}, //
+    {true, 0, 1073741824, 1073741824},           //
+};
+
+TEST(ckdint, kr_ckd_add_i32)
+{
+    int32_t res = 0;
+    bool overflow = false;
+    size_t i = 0;
+
+    for (i = 0; i < kr_countof(g_add_i32_tests); i++)
+    {
+        SCOPED_TRACE("a:%ld, b:%ld", (long)g_add_i32_tests[i].a, (long)g_add_i32_tests[i].b);
+
+        overflow = kr_ckd_add_i32(&res, g_add_i32_tests[i].a, g_add_i32_tests[i].b);
+        EXPECT_BOOLEQ(overflow, g_add_i32_tests[i].overflow);
+        if (!overflow)
+        {
+            EXPECT_INTEQ(res, g_add_i32_tests[i].res);
+        }
+    }
+}
+
+/******************************************************************************/
+
+static struct
+{
+    bool overflow;
+    uint16_t res;
+    uintmax_t a;
+    uintmax_t b;
+} g_add_u16_tests[] = {
+    {false, 3, 1, 2},                  //
+    {false, 1, 1, 0},                  //
+    {false, 2, 0, 2},                  //
+    {true, 0, UINT16_MAX, 1},          //
+    {true, 0, 1, UINT16_MAX},          //
+    {true, 0, UINT16_MAX, UINT16_MAX}, //
+};
+
+TEST(ckdint, kr_ckd_add_u16)
+{
+    uint16_t res = 0;
+    bool overflow = false;
+    size_t i = 0;
+
+    for (i = 0; i < kr_countof(g_add_u16_tests); i++)
+    {
+        SCOPED_TRACE("a:%lu, b:%lu", (unsigned long)g_add_u16_tests[i].a, (unsigned long)g_add_u16_tests[i].b);
+
+        overflow = kr_ckd_add_u16(&res, g_add_u16_tests[i].a, g_add_u16_tests[i].b);
+        EXPECT_BOOLEQ(overflow, g_add_u16_tests[i].overflow);
+        if (!overflow)
+        {
+            EXPECT_INTEQ(res, g_add_u16_tests[i].res);
+        }
+    }
+}
+
+/******************************************************************************/
+
+static struct
+{
+    bool overflow;
     uint32_t res;
     uintmax_t a;
     uintmax_t b;
 } g_add_u32_tests[] = {
-    {3, 1, 2},                            //
-    {1, 1, 0},                            //
-    {2, 0, 2},                            //
-    {0xDEAD, UINT32_MAX, 1},              //
-    {0xDEAD, 1, UINT32_MAX},              //
-    {0xDEAD, UINT32_MAX, UINT32_MAX},     //
-    {4294967294, 2147483647, 2147483647}, //
-    {0xDEAD, 2147483648, 2147483648},     //
+    {false, 3, 1, 2},                            //
+    {false, 1, 1, 0},                            //
+    {false, 2, 0, 2},                            //
+    {true, 0, UINT32_MAX, 1},                    //
+    {true, 0, 1, UINT32_MAX},                    //
+    {true, 0, UINT32_MAX, UINT32_MAX},           //
+    {false, 4294967294, 2147483647, 2147483647}, //
+    {true, 0, 2147483648, 2147483648},           //
 };
 
 TEST(ckdint, kr_ckd_add_u32)
@@ -86,19 +160,18 @@ TEST(ckdint, kr_ckd_add_u32)
         SCOPED_TRACE("a:%lu, b:%lu", (unsigned long)g_add_u32_tests[i].a, (unsigned long)g_add_u32_tests[i].b);
 
         overflow = kr_ckd_add_u32(&res, g_add_u32_tests[i].a, g_add_u32_tests[i].b);
+        EXPECT_BOOLEQ(overflow, g_add_u32_tests[i].overflow);
         if (!overflow)
         {
             EXPECT_INTEQ(res, g_add_u32_tests[i].res);
-        }
-        else
-        {
-            EXPECT_INTEQ(0xDEAD, g_add_u32_tests[i].res);
         }
     }
 }
 
 SUITE(ckdint)
 {
+    SUITE_TEST(ckdint, kr_ckd_add_i16);
     SUITE_TEST(ckdint, kr_ckd_add_i32);
+    SUITE_TEST(ckdint, kr_ckd_add_u16);
     SUITE_TEST(ckdint, kr_ckd_add_u32);
 }
