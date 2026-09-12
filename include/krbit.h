@@ -723,8 +723,7 @@ KR_CONSTEXPR unsigned kr_trailing_zeros16(uint16_t x) KR_NOEXCEPT
     x |= x << 2;
     x |= x << 4;
     x |= x << 8;
-    x |= x << 16;
-    return 16 - kr_count_ones32(x);
+    return 16 - kr_count_ones16(x);
 }
 
 KR_CONSTEXPR unsigned kr_trailing_zeros32(uint32_t x) KR_NOEXCEPT
