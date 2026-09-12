@@ -567,24 +567,28 @@ KR_CONSTEXPR unsigned kr_bit_width64(uint64_t x) KR_NOEXCEPT
 
 KR_CONSTEXPR uint8_t kr_rotate_left8(uint8_t x, unsigned c) KR_NOEXCEPT
 {
-    return KR_CASTS(uint8_t, x << c) | KR_CASTS(uint8_t, x >> ((0 - c) & 0x07));
+    unsigned r = c & 0x7;
+    return KR_CASTS(uint8_t, x << r) | KR_CASTS(uint8_t, x >> ((0u - r) & 0x7));
 }
 
 KR_CONSTEXPR uint16_t kr_rotate_left16(uint16_t x, unsigned c) KR_NOEXCEPT
 {
-    return KR_CASTS(uint16_t, x << c) | KR_CASTS(uint16_t, x >> ((0 - c) & 0x0F));
+    unsigned r = c & 0xF;
+    return KR_CASTS(uint16_t, x << r) | KR_CASTS(uint16_t, x >> ((0u - r) & 0xF));
 }
 
 KR_CONSTEXPR uint32_t kr_rotate_left32(uint32_t x, unsigned c) KR_NOEXCEPT
 {
-    return (x << c) | (x >> ((0 - c) & 0x1F));
+    unsigned r = c & 0x1F;
+    return (x << r) | (x >> ((0u - r) & 0x1F));
 }
 
 #if defined(UINT64_MAX)
 
 KR_CONSTEXPR uint64_t kr_rotate_left64(uint64_t x, unsigned c) KR_NOEXCEPT
 {
-    return (x << c) | (x >> ((0 - c) & 0x3F));
+    unsigned r = c & 0x3F;
+    return (x << r) | (x >> ((0u - r) & 0x3F));
 }
 
 #endif /* defined(UINT64_MAX) */
@@ -593,24 +597,28 @@ KR_CONSTEXPR uint64_t kr_rotate_left64(uint64_t x, unsigned c) KR_NOEXCEPT
 
 KR_CONSTEXPR uint8_t kr_rotate_right8(uint8_t x, unsigned c) KR_NOEXCEPT
 {
-    return KR_CASTS(uint8_t, x >> c) | KR_CASTS(uint8_t, x << ((0 - c) & 0x07));
+    unsigned r = c & 0x7;
+    return KR_CASTS(uint8_t, x >> r) | KR_CASTS(uint8_t, x << ((0u - r) & 0x7));
 }
 
 KR_CONSTEXPR uint16_t kr_rotate_right16(uint16_t x, unsigned c) KR_NOEXCEPT
 {
-    return KR_CASTS(uint16_t, x >> c) | KR_CASTS(uint16_t, x << ((0 - c) & 0x0F));
+    unsigned r = c & 0xF;
+    return KR_CASTS(uint16_t, x >> r) | KR_CASTS(uint16_t, x << ((0u - r) & 0xF));
 }
 
 KR_CONSTEXPR uint32_t kr_rotate_right32(uint32_t x, unsigned c) KR_NOEXCEPT
 {
-    return (x >> c) | (x << ((0 - c) & 0x1F));
+    unsigned r = c & 0x1F;
+    return (x >> r) | (x << ((0u - r) & 0x1F));
 }
 
 #if defined(UINT64_MAX)
 
 KR_CONSTEXPR uint64_t kr_rotate_right64(uint64_t x, unsigned c) KR_NOEXCEPT
 {
-    return (x >> c) | (x << ((0 - c) & 0x3F));
+    unsigned r = c & 0x3F;
+    return (x >> r) | (x << ((0u - r) & 0x3F));
 }
 
 #endif /* defined(UINT64_MAX) */
